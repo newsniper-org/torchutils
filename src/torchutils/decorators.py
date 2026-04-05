@@ -18,9 +18,7 @@ class auxloss(property, Generic[M, V]):
         self._freset = freset
 
     def setter(self, fset: Callable[[M, torch.Tensor], None]):
-        # property.setter()는 "새 property"를 반환하므로, auxloss로 재구성
-        p = super().setter(fset)  # type: ignore[misc]
-        return auxloss(p.fget, self._fcollect, p.fset, self._freset, p.__doc__)
+        return auxloss(self.fget, self._fcollect, fset, self._freset, self.__doc__)
 
     def collector(self, fcollect):
         return auxloss(self.fget, fcollect, self.fset, self._freset, self.__doc__)
